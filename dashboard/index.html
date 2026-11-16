@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">◉</div>
+    <div>
+      <h1>TOKEN RADAR</h1>
+      <p class="tag">Pre-token protocols, ranked by what a token would be worth — priced by the market itself.</p>
+    </div>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+<section class="stats" id="stats" aria-label="Snapshot summary"></section>
+<nav class="controls" aria-label="Board controls">
+  <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols">
+  <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+  <select id="chain" aria-label="Filter by chain"><option value="">All chains</option></select>
+  <select id="growth" aria-label="Filter by growth">
+    <option value="">Any 7d growth</option>
+    <option value="up">Growing (7d &gt; 0%)</option>
+    <option value="down">Falling (7d &lt; 0%)</option>
+    <option value="hot">Hot (7d &gt; +10%)</option>
+  </select>
+  <select id="tvl" aria-label="Filter by TVL">
+    <option value="0">Any TVL</option>
+    <option value="1000000000">TVL ≥ $1B</option>
+    <option value="100000000">TVL ≥ $100M</option>
+    <option value="50000000">TVL ≥ $50M (watchlist floor)</option>
+  </select>
+  <label class="watch"><input id="watch" type="checkbox"> Watchlist only</label>
+  <div class="views">
+    <button id="viewBoard" class="on" type="button">Board</button>
+    <button id="viewLive" type="button">Live tokens</button>
+    <button id="viewModel" type="button">Model</button>
+  </div>
+</nav>
+<main>
+  <section id="boardWrap">
+    <table id="board" aria-label="Ranked board">
+      <thead><tr id="headRow"></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="count" id="count"></p>
+  </section>
+  <section id="liveWrap" hidden>
+    <table id="live" aria-label="Live-token protocols">
+      <thead><tr><th>Protocol</th><th>Category</th><th>TVL</th><th>Market cap</th><th>7d</th><th>mcap / TVL</th></tr></thead>
+      <tbody id="liveRows"></tbody>
+    </table>
+    <p class="note">Live tokens are shown at the market's own value — never mixed into the ranked board. Their mcap/TVL multiples are what calibrate the model.</p>
+  </section>
+  <section id="modelWrap" hidden>
+    <h2>How the value is priced</h2>
+    <p id="modelIntro"></p>
+    <table id="calib" aria-label="Calibration by category">
+      <thead><tr><th>Category</th><th>Live protocols</th><th>Median mcap / TVL</th><th>Multiple used</th></tr></thead>
+      <tbody id="calibRows"></tbody>
+    </table>
+    <div class="sandbox">
+      <h3>Model sandbox — re-price the board</h3>
+      <p>Move a slider and the board re-ranks with the same arithmetic the program ran. Nothing here is hardcoded to a name.</p>
+      <label>Growth weight <output id="gwOut"></output><input id="gw" type="range" min="0" max="1" step="0.05" value="0.4"></label>
+      <label>Maturity floor <output id="mfOut"></output><input id="mf" type="range" min="0.3" max="0.8" step="0.05" value="0.55"></label>
+      <label>Breadth per chain <output id="bpOut"></output><input id="bp" type="range" min="0" max="0.06" step="0.005" value="0.03"></label>
+      <button id="sandboxReset" type="button">Reset to radar-2</button>
+    </div>
+  </section>
+</main>
+<aside id="detail" hidden aria-label="Protocol detail"></aside>
+<footer>
+  <p><strong>What this is.</strong> A radar, not a prediction: it says what a protocol's token would be worth <em>if its record stayed as it is</em>. It does not predict whether or when a token is issued.</p>
+  <p><strong>Honest labels.</strong> A protocol “records no token” when DefiLlama's record carries none — never “has no token”: a listed protocol may still hold one its record does not carry. Wrapped, staked and bridged products of a token that already trades are set aside: WBTC is Bitcoin on Ethereum, not a launch waiting to happen. The watchlist is a floor, never a ceiling: the board ranks every rankable pre-token protocol down to the snapshot's $5M line.</p>
+  <p id="src"></p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
